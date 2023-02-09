@@ -14,7 +14,7 @@
 
 <body onload="pageLoad()"> 
     <h1>ANU BGS Search</h1>
-    <input type="text" id="BGname" alt = "Search Feild" placeholder="eg. &quot;WingSpan&quot;" autofocus class="searchBar" style="max-width: none;">
+    <input type="text" id="BGname" alt = "Search Feild" placeholder="eg. &quot;WingSpan&quot;" autofocus class="searchBar" style="max-width: none;" onchange="setMostRelevent()">
     <h3 style="text-align: center;">Options</h3>
     <div>
         <div class="experiment tabable" id="playExperiment" tabindex="0">
@@ -402,6 +402,10 @@
                 }
             }
         }
+        
+        function setMostRelevent(){
+            document.getElementById("sortBy").value == "Relevance"
+        }
 
         function removeTrans(){
             this.classList.remove("trans")
@@ -578,7 +582,7 @@
 
         function search(){
             // Read search parameters
-            const name = document.getElementById("BGname").value.toUpperCase();
+            const name = document.getElementById("BGname").value.toUpperCase().trim();
 
             let playerFilter = false;
             const mPC = !document.getElementById("UsePollResults").checked;
