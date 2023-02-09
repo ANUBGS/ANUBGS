@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<head>
+    <title>ANU BGS Search</title>
+    <link rel="icon" type="image/x-icon" href="https://getqpay.com/wp-content/uploads/2018/08/cropped-QPay_prpl-32x32.png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=divice-width, initial-scale=1.0">
+    <meta name="keywords" content="ANU BGS, ANU Board Games, ANU Board Games Society, ANU Board Games Search, ANU BGS Search, ANU Board Games Society Search">
+    <meta name="description" content="Search ANU Board Games Society's collection of games. Filtering options for Player Count, Time, Ratings, Game Complexity and Genre">
+    <meta name="author" content="ANU BGS">
+</head>
+
+<body onload="pageLoad()"> 
+    <h1>ANU BGS Search</h1>
+    <input type="text" id="BGname" alt = "Search Feild" placeholder="eg. &quot;WingSpan&quot;" autofocus class="searchBar" style="max-width: none;">
+    <h3 style="text-align: center;">Options</h3>
+    <div>
+        <div class="experiment tabable" id="playExperiment" tabindex="0">
+            <p class="eLabel">Players</p>
+            <img class="chevron" src="ExpandIcon.svg" width="16px" height="16px">
+        </div>
+        <div class="insides" id="playerAccordian">
+            <div class="fGrid">
+                <label for="noPlayers" id="noPlayersLabel">Number of Players</label>
+                <div id="noPlayersDiv">
+                    <input type="number" class="tabable" tabindex = "-1" min="1" max="24" id="noPlayers" name = "noPlayers" autocomplete="off">
+                </div>
+                <label for ="minPlayers" class="prange" style="display: none;">Min Players</label>
+                <div class="prange" style="display: none;">
+                    <input type="number" class="tabable" tabindex = "-1" min="1" max="24" step="1" id ="minPlayers" name = "minPlayers" alt="Minimum Number of Players" autocomplete="off">
+                </div>
+                <label for ="maxPlayers" class="prange" style="display: none;">Max Players</label>
+                <div class="prange" style="display: none;">
+                    <input type="number"  class="tabable" tabindex = "-1" min="1" max="24" step="1" id ="maxPlayers" name = "maxPlayers" alt="Maximum Number of Players" autocomplete="off">
+                </div>
+                <label for="isPRange">Use Range</label>
+                <div>
+                    <input type="checkbox" class="tabable" tabindex = "-1" id="isPRange" name="isPRange" onchange="UsePlayerRangeUpdate()" autocomplete="off">
+                </div>
+                <label for="UsePollResults">Use People's Choice for Player Count</label>
+                <div>
+                    <input type="checkbox" class="tabable" tabindex = "-1" id="UsePollResults" name="UsePollResults" onchange="usePC()" autocomplete="off">
+                </div>
+            </div>
+            <div class="experiment tabable pc" style="display:none; width: 80%;" id="PC" tabindex="-1">
+                <p class="eLabel">People's Choice Details</p>
+                <img class="chevron" src="ExpandIcon.svg" width="16px" height="16px">
+            </div>
+            <div class="insides pc" style="display:none;">
+                <div class="helpbox" style="margin-top: 5px">
+                    <div class="ttLabel tabable" tabindex = "-1">
+                        What does this mean?
+                    </div>
+                    <div class="helpboxtext">
+                        Users of BGG are asked to rate how fun it is to play a game with a certain number of people.<br>
+                        They are classified as "Good", "Okay" or "Bad".
+                    </div>
+                </div><br>
+                <div class="fGrid">
+                    <label for="pcGood" id="pcGoodLabel">Min "Good" Percentage</label>
+                    <div>
+                        <input type="range" class= "tabable" tabindex = "-1" min="0" max="1" step="0.01" value="0.5" id="pcGood" onchange="pcGoodUpdate()" autocomplete="off">
+                        <div class="helpbox">
+                            <div class="ttLabel tabable" tabindex="-1">
+                                ?
+                            </div>
+                            <div class="helpboxtext">
+                                A game will only show up in the search results if at least this percentage of people rated it "Good" for selected player range
+                            </div>
+                        </div>
+                    </div>
+                    <label for="pcOkay" id="pcOkayLabel">Min "Good"/"Okay" Percentage</label>
+                    <div>
+                        <input type="range" class="tabable" tabindex = "-1" min="0" max="1" step="0.01" value="0.8" id="pcOkay" onchange="pcOkayUpdate()" autocomplete="off">
+                        <div class="helpbox" style="display: inline-block;">
+                            <div class="ttLabel tabable" tabindex="-1">
+                                ?
+                            </div>
+                            <span class="helpboxtext">
+                                A game will only show up in the search results if at least this percentage of people rated it either "Good" or "Okay" for selected player range
+                            </span>
+                        </div>
+                    </div>
+                    <label for="minPCVotes" id="minPCVotesLabelDiv">Min Number of Votes</label>
+                    <div>
+                        <input type="number" class="tabable" tabindex = "-1" id="minPCVotes" value="20" min="0" step="5" autocomplete="off">
+                    </div>
+                    <label for="manufacturerData">Use Producer Data in Case of Insufficient Votes</label>
+                    <div>
+                        <input type="checkbox" class="tabable" tabindex = "-1" id="manufacturerData" autocomplete="off">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="experiment tabable" tabindex="0">
+            <p class="eLabel">Time</p>
+            <img class="chevron" src="ExpandIcon.svg" width="16px" height="16px">
+        </div>
+        <div class="insides">
+            <div style="margin-top: 10px;">Measured in Minutes</div>
+            <div class="fGrid">
+                <label for="minPlayTime">Min Play Time</label>
+                <div>
+                    <input type = "number" class="tabable" tabindex="-1" min ="0" value = "0" step="5" max="10140" autocomplete="off" id="minPlayTime" name="minPlayTime">
+                </div>
+                <label for="maxPlayTime" id="maxPlayTimeLabel">Max Play Time</label>
+                <div>
+                    <input type = "number" min ="5" class="tabable" tabindex="-1" value = "120" step="5"max="10140" autocomplete="off" id="maxPlayTime" name="maxPlayTime">
+                </div>
+                <label for="useMax">No Max Time</label>
+                <div>
+                    <input type = "checkbox" id="useMax" class="tabable" tabindex="-1" name="useMax" checked autocomplete="off" onchange="useMaxUpdate()">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="experiment tabable" tabindex="0">
+            <p class="eLabel">Rating</p>
+            <img class="chevron" src="ExpandIcon.svg" width="16px" height="16px">
+        </div>
+        <div class="insides">
+            <div class="fGrid">
+                <label for="minRating" id="minRatingLabel">Min Rating</label>
+                <div>
+                    <input type="range" class="tabable" tabindex="-1" min="1" max="10" step="0.05" value="1" name="minRating" id="minRating" autocomplete="off">
+                </div>
+                <label for="maxRating" id="maxRatingLabel">Max Rating</label>
+                <div>
+                    <input type="range"class="tabable" tabindex="-1" min="1" max="10" step="0.05" value="10" name="maxRating" id="maxRating" autocomplete="off">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="experiment tabable" tabindex="0">
+            <p class="eLabel">Complexity</p>
+            <img class="chevron" src="ExpandIcon.svg" width="16px" height="16px">
+        </div>
+        <div class="insides">
+            <div class="helpbox" style="display: inline-block; margin-top: 15px;">
+                <div class="ttLabel tabable" tabindex="-1">
+                    What Does this Mean?
+                </div>
+                <span class="helpboxtext" id="1k2">
+                    Users of BGG are asked to rate the complexity (ease of understanding) from 1 to 5.<br>
+                    1 is the simplest and 5 is most complex<br>
+                </span>
+            </div><br>
+            <div class="fGrid">
+                <label for="minComplexity" id="minComplexityLabel">Min Complexity</label>
+                <div>
+                    <input type="range" class="tabable" tabindex="-1" max="5" min="1" step="0.01" value="1" autocomplete="off" id="minComplexity" name="minComplexity">
+                </div>
+                <label for="maxComplexity" id ="maxComplexityLabel">Max Complexity</label>
+                <div>
+                    <input type="range" class="tabable" tabindex="-1" max="5" min="1" step="0.01" value="5" autocomplete="off" id="maxComplexity" name="maxComplexity">
+                </div>
+                <label for="minComplexityVotes">Min Votes</label>
+                <div>
+                    <input type="number" class="tabable" tabindex="-1" min="0" value ="20" step="5" autocomplete="off" id="minComplexityVotes" name="minComplexityVotes" onchange="forceNonZero()">
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div>
+        <div class="experiment tabable" tabindex="0">
+            <p class="eLabel">Genre</p>
+            <img class="chevron" src="ExpandIcon.svg" width="16px" height="16px">
+        </div>
+        <div class="insides">
+            <div class="fGrid">
+                <!--Party-->
+                <label for="gP">Party</label>
+                <div>
+                    <input type="checkbox" class ="tabable" tabindex="-1" autocomplete="off" checked id="gP" name="gP" onchange="updateGenreCheckBoxes()">
+                    <div class="helpbox" style="display: inline-block;">
+                        <div class="ttLabel tabable" tabindex="-1">
+                            ?
+                        </div>
+                        <span class="helpboxtext">
+                            Lots of Player interaction, typically suitable for larger groups, few rules.<br>
+                            eg. Warewolf
+                        </span>
+                    </div>
+                </div>
+                <!--Strategy-->
+                <label for="gS">Strategy</label>
+                <div>
+                    <input type="checkbox" class ="tabable" tabindex="-1" autocomplete="off" checked id="gS" name="gS" onchange="updateGenreCheckBoxes()">
+                    <div class="helpbox" style="display: inline-block;">
+                        <div class="ttLabel tabable" tabindex="-1">
+                            ?
+                        </div>
+                        <span class="helpboxtext">
+                            Choices have significant effect on the outcome, planning is nessesary to win<br>
+                            eg. Catan
+                        </span>
+                    </div>
+                </div>
+                <!--Abstract Strategy-->
+                <label for="gAS">Abstract Strategy</label>
+                <div>
+                    <input type="checkbox" class ="tabable" tabindex="-1" autocomplete="off" checked id="gAS" name="gAS" onchange="updateGenreCheckBoxes()">
+                    <div class="helpbox" style="display: inline-block;">
+                        <div class="ttLabel tabable" tabindex="-1">
+                            ?
+                        </div>
+                        <span class="helpboxtext">
+                            No luck or hidden information involved (mostly)<br>
+                            eg. Chess
+                        </span>
+                    </div>
+                </div>
+                <!--Thematic-->
+                <label for="gT">Thematic</label>
+                <div>
+                    <input type="checkbox" class ="tabable" tabindex="-1" autocomplete="off" checked id="gT" name="gT" onchange="updateGenreCheckBoxes()">
+                    <div class="helpbox" style="display: inline-block;">
+                        <div class="ttLabel tabable" tabindex="-1">
+                            ?
+                        </div>
+                        <span class="helpboxtext">
+                            Emphasis on story, setting, character or Theme<br>
+                            eg. Mysterium
+                        </span>
+                    </div>
+                </div>
+                <!--Family-->
+                <label for="gF">Family</label>
+                <div>
+                    <input type="checkbox" class ="tabable" tabindex="-1" autocomplete="off" checked id="gF" name="gF" onchange="updateGenreCheckBoxes()">
+                    <div class="helpbox" style="display: inline-block;">
+                        <div class="ttLabel tabable" tabindex="-1">
+                            ?
+                        </div>
+                        <span class="helpboxtext">
+                            Suitable for both kids and adults<br>
+                            eg. Carcassone
+                        </span>
+                    </div>
+                </div>
+                <!--Childrens-->
+                <label for="gKids">Children</label>
+                <div>
+                    <input type="checkbox" class ="tabable" tabindex="-1" autocomplete="off" checked id="gKids" name="gKids" onchange="updateGenreCheckBoxes()">
+                    <div class="helpbox" style="display: inline-block;">
+                        <div class="ttLabel tabable" tabindex="-1">
+                            ?
+                        </div>
+                        <span class="helpboxtext">
+                            For children<br>
+                            eg. Connect Four
+                        </span>
+                    </div>
+                </div>
+                <!--Customisable-->
+                <label for="gC">Customisable</label>
+                <div>
+                    <input type="checkbox" class ="tabable" tabindex="-1" autocomplete="off" checked id="gC" name="gC" onchange="updateGenreCheckBoxes()">
+                    <div class="helpbox" style="display: inline-block;">
+                        <div class="ttLabel tabable" tabindex="-1">
+                            ?
+                        </div>
+                        <span class="helpboxtext">
+                            Build your own Deck, Fleet, Army ect.<br>
+                            eg. Magic: The Gathering
+                        </span>
+                    </div>
+                </div>
+                <!--Wargames-->
+                <label for="gW">Wargames</label>
+                <div>
+                    <input type="checkbox" class ="tabable" tabindex="-1" autocomplete="off" checked id="gW" name="gW" onchange="updateGenreCheckBoxes()">
+                    <div class="helpbox" style="display: inline-block;">
+                        <div class="ttLabel tabable" tabindex="-1">
+                            ?
+                        </div>
+                        <span class="helpboxtext">
+                            Games that aim to simulate warfare, often involving minatures<br>
+                            eg. Risk
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center">
+                <div class="allOfAbove">
+                    <!---All of the Above-->
+                    <label for="gAll">All of the Above</label>
+                    <input type="checkbox" class ="tabable" tabindex="-1" autocomplete="off" checked id="gAll" name="gAll" onchange="updateAllofAbove()">
+                </div>
+            </div>
+        </div>
+    </div>
+    <button alt="Reset All Filters" onclick="resetFilters()" id="reset">Reset Filters</button>
+    <button type = "button" alt="Search Button" id="Search" onclick="search()">Search</button>
+    <div style="text-align: center; margin-top: 10px;">
+        <label for="sortBy">Sort By: </label>
+        <select name="sortBy" id = "sortBy">
+            <option value = "RatingHF">Rating - Highest First</option>
+            <option value = "RatingLF">Rating - Lowest First</option>
+            <option value = "TimeHF">Time - Longest First</option>
+            <option value = "TimeLF">Time - Shortest First</option>
+            <option value = "ComplexLF">Complexity - Simplest First</option>
+            <option value = "ComplexHF">Complexity - Most Complex First</option>
+            <option value = "Relevance">Most Relevent</option>
+            <option value = "Random">Random</option>
+        </select>
+    </div>
+    <div id="resultsWrap" role="region">
+        <table id="Results">
+            <tr id="ResultsHead">
+                <th>Name</th>
+                <th>Players</th>
+                <th>Time (mins)</th>
+                <th>Complexity</th>
+                <th>Rating</th>
+                <th>Genre</th>
+            </tr>
+        </table>
+    </div>
+    <div id="noResults" style="display: none; text-align: center;">
+        <h2>Your search did not match any borad games</h2>
+        <p>Try broadening your search criteria</p>
+    </div>
+    <div style="text-align: center;">
+        <p>All data sourced from and belongs to <a href="https://boardgamegeek.com/">BoardGameGeek</a></p>
+        <a href="About.html">About</a>
+    </div>
+
+    <script>
+        const data = [];
+        async function showAll(){
+            const requestURL = "http://localhost:8000/BGdata.json";
+            const request = new Request(requestURL);
+
+            const response = await fetch(request);
+            const tData = await response.json();
+
+            for (var i = 0; i < tData.length; i ++){
+                data.push(tData[i]);
+            }
+            search()
+        }
+
+        function alterTabable(element,capable){
+            if (element.classList.contains("tabable")){
+                element.tabIndex = capable ? "0" : "-1";
+            }
+            if (!element.classList.contains("insides") || element.classList.contains("open")){
+                for (var i = 0; i < element.children.length; i++){
+                    alterTabable(element.children[i],capable)
+                }
+            }
+        }
+
+        function extendDropDown(element){
+            element.classList.toggle("open");
+            const opening = element.classList.contains("open");
+            let children = element.parentElement.children;
+            for (var j = 0; j <children.length; j++){
+                if (children[j].classList.contains("insides")){
+
+                    if (!opening && (!children[j].classList.contains("experiment") || children[j].parentElement.classList.contains("experiment"))){
+                        alterTabable(children[j],opening)
+                    }
+
+                    if (!children[j].parentElement.classList.contains("insides")){
+                        children[j].classList.add("trans")
+                    }
+
+                    if (opening){
+                        children[j].classList.add("open")
+                        children[j].style.maxHeight = children[j].scrollHeight +"px";
+                    } else {
+                        children[j].style.overflow = "hidden"
+                        children[j].classList.remove("open")
+                    }
+
+                    if (element.parentElement.classList.contains("insides")){
+                        if (opening) {
+                            element.parentElement.style.maxHeight = element.parentElement.scrollHeight +"px";
+                        } else {
+                            children[j].classList.add("trans")
+                            children[j].style.maxHeight = "0px"
+                            children[j].addEventListener("transitionend", removeTrans)
+                        }
+                    }else{
+                        children[j].classList.add("trans")
+                        if (!opening){
+                            children[j].style.maxHeight = "0px"
+                        }
+                    }
+                }
+                if (opening){
+                    alterTabable(children[j],opening)
+                }
+            }
+        }
+
+        function removeTrans(){
+            this.classList.remove("trans")
+            this.parentElement.style.maxHeight = this.parentElement.scrollHeight + "px";
+        }
+
+        function updateLabels(root){
+            document.getElementById("min"+root+"Label").innerHTML = "Min " + root + " " +  neatenNumber(Number(document.getElementById("min"+root).value),2)
+            document.getElementById("max"+root+"Label").innerHTML = "Max " + root + " " + neatenNumber(Number(document.getElementById("max"+root).value),2)
+        }
+
+        function pageLoad(){
+            window.alert("This page conatins links to BoardGameGeek.com which requires users to be over 16 years of age at time of publication, see https://boardgamegeek.com/terms for more details and up-to-date information")
+            updateLabels("Rating")
+            updateLabels("Complexity")
+            useMaxUpdate()
+            pcLabels()
+            showAll()
+
+
+            const minRoots = ["Players", "Complexity", "PlayTime", "Rating"]
+            for (var i = 0; i <minRoots.length; i ++){
+                const root = minRoots[i];
+                const minName = "min"+root;
+                const maxName = "max"+root;
+                const isRange = document.getElementById(maxName).type == "range";
+                const minDifference = minRoots[i] == "Players" ? 0 : Number(document.getElementById(minName).step)
+                document.getElementById(minName).addEventListener("change", () => {
+                    if (Number(document.getElementById(minName).value) >= Number(document.getElementById(maxName).value) && (root != "PlayTime" || !document.getElementById("useMax").checked)){
+                        document.getElementById(maxName).value = Math.min(Number(document.getElementById(minName).value)+minDifference,Number(document.getElementById(minName).max))
+                    }
+                    if (isRange){
+                        updateLabels(root)
+                    }
+                })
+                document.getElementById(maxName).addEventListener("change", () => {
+                    if (Number(document.getElementById(minName).value) >= Number(document.getElementById(maxName).value)){
+                        document.getElementById(minName).value = Math.max(Number(document.getElementById(maxName).value)-minDifference,Number(document.getElementById(minName).min))
+                    }
+                    if (isRange){
+                        updateLabels(root)
+                    }
+                })
+            }
+
+            var experiments = document.getElementsByClassName("experiment")
+            for (var i =0; i < experiments.length; i++){
+                experiments[i].addEventListener("click", function(e) {
+                    extendDropDown(this);
+                })
+                experiments[i].addEventListener("keydown",function(e){
+                    if (e.key == " " || e.key =="Enter"){
+                        extendDropDown(this);
+                    }
+                })
+            }
+
+            let toltips= document.getElementsByClassName("helpbox")
+            for (var i =0;i<toltips.length;i++){
+                const temptt = toltips[i]
+                toltips[i].addEventListener("mousemove", (e) => {
+                    for(var j =0; j< temptt.children.length; j++){
+                        if (temptt.children[j].classList.contains("helpboxtext") && !temptt.children[j].classList.contains("tabF")){
+                            temptt.children[j].style.top = (e.clientY-temptt.children[j].clientHeight-15)+"px"
+                            temptt.children[j].style.left = (e.clientX-temptt.children[j].clientWidth/2)+"px"
+                        }
+                    }
+                    
+                })
+
+                for (var n = 0; n < toltips[i].children.length; n ++){
+                    if (toltips[i].children[n].classList.contains("ttLabel")){
+                        toltips[i].children[n].addEventListener("mouseenter", () =>{
+                            for (var j = 0; j <temptt.children.length; j++){
+                                if (temptt.children[j].classList.contains("helpboxtext") && !temptt.children[j].classList.contains("tabF")){
+                                    temptt.children[j].classList.add("show")
+                                    temptt.children[j].classList.add("mouseF")
+                                }
+                            }
+                        })
+                        toltips[i].children[n].addEventListener("mouseleave", () =>{
+                            for (var j = 0; j <temptt.children.length; j++){
+                                if (temptt.children[j].classList.contains("helpboxtext") && temptt.children[j].classList.contains("mouseF")){
+                                    temptt.children[j].classList.remove("show")
+                                    temptt.children[j].classList.remove("mouseF")
+                                }
+                            }
+                        })
+                        toltips[i].children[n].addEventListener("blur", () =>{
+                            for (var j = 0; j <temptt.children.length; j++){
+                                if (temptt.children[j].classList.contains("helpboxtext") && temptt.children[j].classList.contains("tabF")){
+                                    temptt.children[j].classList.remove("show")
+                                    temptt.children[j].classList.remove("tabF")
+                                }
+                            }
+                        })
+                        const temptttext = toltips[i].children[n]
+                        toltips[i].children[n].addEventListener("focus", () =>{
+                            let bb = temptttext.getBoundingClientRect()
+                            for (var j = 0; j <temptt.children.length; j++){
+                                if (temptt.children[j].classList.contains("helpboxtext") && !temptt.children[j].classList.contains("mouseF")){
+                                    temptt.children[j].classList.add("show")
+                                    temptt.children[j].classList.add("tabF")
+                                    temptt.children[j].style.top = (bb.y+bb.height/2-15-temptt.children[j].clientHeight)+"px"
+                                    temptt.children[j].style.left = (bb.x+bb.width/2-temptt.children[j].clientWidth/2)+"px"
+                                }
+                            }
+                        })
+                    }
+                }
+                
+                
+            }
+            /*window.addEventListener("scroll", (event) => {
+                document.getElementById("ResultsHead").style.transform = "translateY("+Math.max(-(document.getElementById("Results").getBoundingClientRect().y),0)+"px)"
+            })*/
+
+            //Make nested list
+            var nodes = document.getElementsByClassName("nodeItem")
+
+            for (var i = 0; i <nodes.length; i ++){
+                nodes[i].addEventListener("click", function(e){
+                    dropdown(this);
+                })
+                nodes[i].addEventListener("keydown", function(e){
+                    if (e.key == " "){
+                        dropdown(this)
+                    }
+                });
+            }
+        }
+
+        function displayBG(bg){
+            var result = "<tr>";
+            // Name
+            result += "<td class=\"nameC\"><a href=\"" + bg.url + "\" tabindex=\"1\">"+ bg.title+"</a></td>";
+            // Players
+            if (bg.minPC == bg.maxPC){
+                result += "<td class=\"playersC\">" + bg.minPC + "</td>";
+            }else {
+                result += "<td class=\"playersC\">" + bg.minPC + " - " + bg.maxPC + "</td>";
+            }
+            // Time
+            if (bg.minTime == bg.maxTime){
+                result += "<td class=\"timeC\">" + bg.minTime + "</td>";
+            }else{
+                result += "<td class=\"timeC\">" + bg.minTime + " - " + bg.maxTime + "</td>";
+            }
+            // Complexity
+            if (bg.nWeights < Number(document.getElementById("minComplexityVotes").value)){
+                result += "<td class=\"na\">n.a.</td>";
+            } else {
+                result += "<td class=\"complexityC\">"+neatenNumber(bg.complexity,2)+"</td>"
+            }
+            // Rating
+            if (bg.rating < 0){
+                result += "<td class=\"na\">n.a.</td>";
+            } else {
+                result += "<td class=\"ratingC\">"+neatenNumber(bg.rating,2)+"</td>"
+            }
+            // Genre
+            if (bg.genre.length == 0){
+                result +="<td class=\"noGenre\">n.a.</td>"
+            } else {
+                result += "<td class=\"noGenre\">"
+                for (var i = 0; i < bg.genre.length; i++){
+                    result += bg.genre[i] + ((i == bg.genre.length-1)? "" : ", ");
+                }
+                result += "</td>"
+            }
+            document.getElementById("Results").innerHTML += result + "</tr>";
+        }
+
+
+        function search(){
+            // Read search parameters
+            const name = document.getElementById("BGname").value.toUpperCase();
+
+            let playerFilter = false;
+            const mPC = !document.getElementById("UsePollResults").checked;
+            let maxP = -1;
+            let minP = -1;
+            if (document.getElementById("isPRange").checked && document.getElementById("maxPlayers").value!= 0){
+                playerFilter = true;
+                minP = Number(document.getElementById("minPlayers").value);
+                maxP = Number(document.getElementById("maxPlayers").value);
+            } else if (document.getElementById("noPlayers").value != ""){
+                playerFilter = true;
+                minP = Number(document.getElementById("noPlayers").value);
+                maxP = minP;
+            }
+            
+            let minVotes = Number(document.getElementById("minPCVotes").value);
+            let minGood = Number(document.getElementById("pcGood").value);
+            let minOkay = Number(document.getElementById("pcOkay").value);
+            let scarce = document.getElementById("manufacturerData").checked;
+
+            // Read complexity search parameters
+            let minComp = Number(document.getElementById("minComplexity").value);
+            let maxComp = Number(document.getElementById("maxComplexity").value);
+            let minCompVotes = Number(document.getElementById("minComplexityVotes").value);
+
+            // Time search parameters
+            let minTime = Number(document.getElementById("minPlayTime").value);
+            let maxTime = Number(document.getElementById("maxPlayTime").value);
+            let useMaxTime = !document.getElementById("useMax").checked;
+
+            // Rating search parameters
+            let minRating = Number(document.getElementById("minRating").value);
+            let maxRating = Number(document.getElementById("maxRating").value);
+
+            // Genre search parameters
+            let genres = []
+            let ids = ["gAS","gC","gT","gF","gKids","gP","gS","gW"]
+            const gNames = ["Abstract Strategy", "Customizable", "Thematic", "Family", "Children", "Party", "Strategy", "Wargames"]
+            for (var i = 0; i < ids.length; i ++){
+                if (document.getElementById(ids[i]).checked){
+                    genres.push(gNames[i])
+                }
+            }
+
+            // Reset results
+            document.getElementById("Results").innerHTML = 
+            `<tr>
+                <th>Name</th>
+                <th>Players</th>
+                <th>Time (mins)</th>
+                <th>Complexity</th>
+                <th>Rating</th>
+                <th>Genre</th>
+            </tr>`;
+
+            let resultCount = 0;
+            let res = [];
+
+            // Filter BGs
+            for(var i = 0; i< data.length; i++){
+                    // Name
+                    if (name != "" && data[i].title.toUpperCase().indexOf(name) == -1){
+                        continue;
+                    }
+
+
+                    // Player Range Filtering
+                    if (playerFilter && (mPC || (data[i].nPC < minVotes && scarce))){
+                        if (!(data[i].minPC <= minP && minP <= maxP && maxP <= data[i].maxPC)){
+                            continue;
+                        }
+                    }else if (playerFilter && data[i].nPC < minVotes){
+                        continue;
+                    } else if (playerFilter){
+                        let trigger = true;
+                        let encountered = 0;
+                        let aboveGood = 0;
+                        let aboveOkay = 0;
+                        let cutoff = 0;
+                        for (var j = 0; j < data[i].recommendedPC.length; j++){
+                            if (trigger && minP <= data[i].recommendedPC[j].count && data[i].recommendedPC[j].count<= maxP){
+                                if (data[i].recommendedPC[j].andAbove){
+                                    if (data[i].recommendedPC[j].count != maxP){
+                                        encountered += maxP-data[i].recommendedPC[j].count;
+                                        if (minGood > data[i].recommendedPC[j].good || minOkay > data[i].recommendedPC[j].okay){
+                                            trigger=false;
+                                        }
+                                    }
+                                }else{
+                                    encountered ++;
+                                    if (minGood > data[i].recommendedPC[j].good || minOkay > data[i].recommendedPC[j].okay){
+                                        trigger=false;
+                                    }
+                                }
+                            }
+
+                            if (data[i].recommendedPC[j].andAbove){
+                                aboveGood = data[i].recommendedPC[j].good;
+                                aboveOkay = data[i].recommendedPC[j].okay;
+                                cutoff = data[i].recommendedPC[j].count;
+                            }
+                        }
+                        if (minP > cutoff && aboveGood > minGood && aboveOkay > minOkay){
+                            encountered = (maxP-minP+1);
+                        }
+                        if (!trigger || encountered < (maxP-minP+1)){
+                            continue;
+                        }
+                    }
+
+                    // Complexity Filtering
+                    if ((data[i].complexity < minComp || data[i].complexity > maxComp || data[i].nWeights < minCompVotes) && (minComp != 1 || maxComp != 5)){
+                        continue;
+                    }
+
+                    // Time Filtering
+                    if (data[i].minTime < minTime || (useMaxTime && data[i].maxTime > maxTime)){
+                        continue;
+                    }
+
+                    // Rating Filtering
+                    if ((minRating > data[i].rating || maxRating < data[i].rating) && (minRating != 1 || maxRating != 10)){
+                        continue;
+                    }
+
+                    // Genre Filtering
+                    if (!document.getElementById("gAll").checked){
+                        if (genres.find(isIn,data[i].genre) == undefined){
+                            continue;
+                        }
+                    }
+
+                    res.push(data[i]);
+                    resultCount ++;
+            }
+
+            //Sorting BGs
+            if (document.getElementById("sortBy").value == "Relevance" && document.getElementById("BGname").value == ""){
+                document.getElementById("sortBy").value = "RatingHF"
+            }
+
+            const sortCriteria = document.getElementById("sortBy").value;
+            if (sortCriteria == "RatingHF" || sortCriteria == "RatingLF"){
+                res.sort((a,b) => {
+                    let flip = sortCriteria == "RatingLF" ? 1 : -1;
+                    if (a.rating-b.rating == 0){
+                        if (a.title < b.title){
+                            return -1;
+                        } else {
+                            return 1;
+                        }
+                    } else {
+                        return flip*(a.rating-b.rating)
+                    }
+                });
+            } else if (sortCriteria == "TimeHF" || sortCriteria == "TimeLF"){
+                res.sort((a,b) => {
+                    let flip = sortCriteria == "TimeLF" ? 1 : -1;
+                    const aTime = a.maxTime + a.minTime;
+                    const bTime = b.maxTime + b.minTime;
+                    if (aTime-bTime == 0){
+                        if (a.title < b.title){
+                            return -1;
+                        } else {
+                            return 1;
+                        }
+                    } else {
+                        return flip*(aTime-bTime);
+                    }
+                });
+            } else if (sortCriteria == "ComplexLF" || sortCriteria == "ComplexHF"){
+                res.sort((a,b) => {
+                    let flip = sortCriteria == "ComplexLF" ? 1 : -1;
+                    if (a.nWeights < minCompVotes && b.nWeights >= minCompVotes){
+                        return 1;
+                    } else if (b.nWeights < minCompVotes && a.nWeights >= minCompVotes){
+                        return -1;
+                    }
+                    if (a.complexity == 0 || b.complexity == 0){
+                        return b.complexity-a.complexity
+                    }
+                    if (a.complexity-b.complexity == 0){
+                        if (a.title < b.title){
+                            return -1;
+                        } else {
+                            return 1;
+                        }
+                    } else {
+                        return flip*(a.complexity-b.complexity)
+                    }
+                });
+            } else if (sortCriteria == "Relevance"){
+                res.sort((a,b) => {
+                    if (name != ""){
+                        const re = new RegExp(name, "gi");
+                        const aIndex = a.title.search(re)
+                        const bIndex = b.title.search(re)
+                        if (aIndex == 0 && bIndex == 0){
+                            return a.title.localeCompare(b.title)
+                        } else if ( aIndex == 0 && bIndex != 0){
+                            return -1;
+                        } else if (bIndex == 0 && aIndex != 0){
+                            return 1;
+                        }
+
+                        
+                        const aEdges = edgeAdjacency(a.title,re);
+                        const bEdges = edgeAdjacency(b.title,re);
+
+                        if (aEdges[1] != bEdges[1]){
+                            return bEdges[1]-aEdges[1];
+                        }else if (aEdges[2] != bEdges[2]){
+                            return bEdges[2]-aEdges[2];
+                        }else if (aEdges[0] != bEdges[0]){
+                            return bEdges[0]-aEdges[0];
+                        } else if (aIndex != bIndex){
+                            return aIndex-bIndex;
+                        } else {
+                            return a.title.localeCompare(b.title)
+                        }
+                    } else {
+                        return a.title.localeCompare(b.title)
+                    }
+                })
+            } else if (sortCriteria == "Random"){
+                var temq = [];
+                while (res.length > 0){
+                    const n = Math.floor(Math.random()*res.length);
+                    const temp = res[n];
+                    res[n] = res[0];
+                    res[0] = temp;
+                    temq.push(res.shift())
+                }
+                res = temq;
+            }
+
+            for (var i = 0; i < res.length; i ++){
+                displayBG(res[i]);
+            }
+            console.log(resultCount)
+            if (resultCount == 0){
+                document.getElementById("resultsWrap").style.display = "none";
+                document.getElementById("noResults").style.display = "inline";
+            }else {
+                document.getElementById("noResults").style.display = "none";
+                document.getElementById("resultsWrap").style.display = "";
+            }
+        }
+
+        function isIn(value){
+            return !(this.find(isEqual,value)==undefined);
+        }
+        function isEqual(value){
+            return (this==value);
+        }
+
+        function edgeAdjacency(str, reg){
+            result = [0,0,0]
+            const matches = str.matchAll(reg);
+            for (const match of matches){
+                result[0] ++;
+                if (match.index != 0){
+                    if (str[match.index-1] == " " || str[match.index-1] == "-" || str[match.index-1] == ":"){
+                        result[1] ++;
+                    }
+                }
+                if (match.index + match[0].length < str.length){
+                    if (str[match.index + match[0].length] == " " || str[match.index + match[0].length] == "-" || str[match.index + match[0].length] == ":"){
+                        result[2] ++;
+                    }
+                }else if (match.index + match[0].length == str.length){
+                    result[2] ++;
+                }
+            }
+            return result
+        }
+
+        //=====================================================================
+        //===============================   GUI   =============================
+        //=====================================================================
+
+        function resetFilters(){
+            if (confirm("Reset All Search Filters?")){
+                document.getElementById("BGname").value="";
+                document.getElementById("noPlayers").value="";
+                document.getElementById("minPlayers").value="";
+                document.getElementById("maxPlayers").value="";
+                document.getElementById("UsePollResults").checked=false;
+                document.getElementById("pcGood").value = "0.5";
+                document.getElementById("pcOkay").value = "0.75";
+                document.getElementById("minPCVotes").value = "20";
+                document.getElementById("manufacturerData").checked=true;
+                document.getElementById("minComplexity").value=document.getElementById("minComplexity").min;
+                document.getElementById("maxComplexity").value=document.getElementById("maxComplexity").max;
+                document.getElementById("minComplexityVotes").value = "20";
+                document.getElementById("minPlayTime").value="0";
+                document.getElementById("maxPlayTime").value="";
+                document.getElementById("useMax").checked=true;
+                document.getElementById("minRating").value=document.getElementById("minRating").min;
+                document.getElementById("maxRating").value=document.getElementById("maxRating").max
+
+                updateLabels("Rating")
+                updateLabels("Complexity")
+                useMaxUpdate()
+                usePC();
+
+                let acc = document.getElementsByClassName("insides");
+                for (var i = 0; i <acc.length; i ++){
+                    acc[i].classList.remove("open")
+                    acc[i].classList.remove("trans")
+                    acc[i].style.maxHeight = "0px"
+                }
+
+                let xp = document.getElementsByClassName("experiment")
+                for (var i = 0; i <xp.length; i ++){
+                    xp[i].classList.remove("open")
+                }
+
+                document.getElementById("PC").style.display="none";
+
+                const ids = ["gP","gS","gAS","gT","gF","gKids","gC","gW"]
+                for (var i = 0; i < ids.length; i ++){
+                    document.getElementById(ids[i]).checked = true;
+                }
+                document.getElementById("gAll").checked = true;
+            }
+        }
+
+
+        // Takes number and number of decimal places (dp) and returns number formatted with trailing zeros
+        function neatenNumber(number,dp){
+            result = number.toString();
+            dpos = result.search(/[^0-9]/);
+            if (dpos == -1){
+                result = result + "." + "0".repeat(dp)
+            } else if (result.length-dpos <= dp){
+                result = result + "0".repeat(Math.max(0,dp-(result.length-dpos)+1))
+            } else {
+                result = result.substr(0,dp+dpos+1);
+            }
+            return result
+        }
+
+        //================================================GUI Players=============================
+        
+        function UsePlayerRangeUpdate(){
+            isChecked = document.getElementById("isPRange").checked;
+            rSelectors = document.getElementsByClassName("prange");
+            // Toggles visibility of "Min Playres" and "Max Players" feilds and labels
+            for (var i = 0; i < rSelectors.length; i ++){
+                rSelectors[i].style.display = isChecked ? "block":"none";
+            }
+            //Toggles visibility of "Number of players" Feild
+            document.getElementById("noPlayersDiv").style.display = isChecked ? "none":"block";
+            document.getElementById("noPlayersLabel").style.display = isChecked ? "none":"block";
+
+            // Gives "Min Players" and "Max Players" feilds same value as selected in "Number of players" feild
+            if(isChecked && document.getElementById("noPlayers").value.length != 0){
+                document.getElementById("minPlayers").value = document.getElementById("noPlayers").value;
+                document.getElementById("maxPlayers").value = document.getElementById("noPlayers").value;
+            // Gives "Number of players" feild average of min and max options
+            }else if (!isChecked && (document.getElementById("minPlayers").value.length != 0 || document.getElementById("maxPlayers").value.length != 0)){
+                var min = document.getElementById("minPlayers").value == "" ? Number(document.getElementById("maxPlayers").value) : Number(document.getElementById("minPlayers").value);
+                var max = document.getElementById("maxPlayers").value == "" ? Number(document.getElementById("minPlayers").value) : Number(document.getElementById("maxPlayers").value);
+                var result = Math.round((max+min)/2)
+                document.getElementById("minPlayers").value = result
+                document.getElementById("maxPlayers").value = result
+                document.getElementById("noPlayers").value = result
+            }
+
+            document.getElementById("playerAccordian").classList.remove("trans")
+            console.log(document.getElementById("playerAccordian").classList)
+            document.getElementById("playerAccordian").style.maxHeight = document.getElementById("playerAccordian").scrollHeight+"px"
+        }
+
+        //===================================GUI Peoples Choice=========================
+
+        //Called when "Use People's Choice for Player Count" changed
+        //Shows drop down menu with details
+        function usePC(){
+            let remove = document.getElementsByClassName("pc");
+            document.getElementById("playerAccordian").classList.add("trans")
+            if (document.getElementById("UsePollResults").checked){
+                for (var i = 0; i < remove.length; i++){
+                    remove[i].style.display = "";
+                }
+                document.getElementById("playerAccordian").style.maxHeight = document.getElementById("playerAccordian").scrollHeight + "px"
+            } else {
+                for (var i = 0; i < remove.length; i++){
+                    remove[i].style.display = "none";
+                }
+                const tempMH = document.getElementById("playerAccordian").scrollHeight + "px"
+                for (var i = 0; i < remove.length; i++){
+                    remove[i].style.display = "";
+                }
+                document.getElementById("playerAccordian").style.maxHeight = tempMH;
+                document.getElementById("playerAccordian").addEventListener("transitionend",removePC)
+            }
+        }
+
+        function removePC(){
+            if (!document.getElementById("UsePollResults").checked){
+                let toBeRemoved = document.getElementsByClassName("pc");
+                for (var i = 0; i < toBeRemoved.length; i++){
+                    toBeRemoved[i].style.display = "none";
+                }
+            }
+        }
+
+        function pcGoodUpdate(){
+            if (Number(document.getElementById("pcGood").value) > Number(document.getElementById("pcOkay").value)){
+                document.getElementById("pcOkay").value = document.getElementById("pcGood").value;
+            }
+            pcLabels()
+        }
+        function pcOkayUpdate(){
+            if (Number(document.getElementById("pcGood").value) > Number(document.getElementById("pcOkay").value)){
+                document.getElementById("pcGood").value = document.getElementById("pcOkay").value;
+            }
+            pcLabels()
+        }
+
+        function pcLabels(){
+            document.getElementById("pcGoodLabel").innerHTML = "Min \"Good\" Percentage: " + Math.round(Number(document.getElementById("pcGood").value)*100) + "%"
+            document.getElementById("pcOkayLabel").innerHTML = "Min \"Good\"/\"Okay\" Percentage: " + Math.round(Number(document.getElementById("pcOkay").value)*100) + "%"
+        }
+
+        //===================================GUI Complexity=============================
+
+        function forceNonZero(){
+            if (Number(document.getElementById("minComplexityVotes").value) == 0){
+                document.getElementById("minComplexityVotes").value = "1";
+            }
+        }
+        //====================================GUI Time=============================
+
+    
+        // Called when the "No Max Time" checkbox is changed
+        // Greys out Max time feild
+        function useMaxUpdate(){
+            document.getElementById("maxPlayTime").disabled = document.getElementById("useMax").checked;
+            document.getElementById("maxPlayTimeLabel").className = document.getElementById("useMax").checked ? "disabled" : "";
+            if (!document.getElementById("useMax").checked){
+                if (document.getElementById("maxPlayTime").value == ""){
+                    document.getElementById("maxPlayTime").value = Math.max(60,Number(document.getElementById("minPlayTime").value))
+                }else if (Number(document.getElementById("minPlayTime").value) >= Number(document.getElementById("maxPlayTime").value)){
+                    document.getElementById("maxPlayTime").value = Number(document.getElementById("minPlayTime").value)+5;
+                }
+            }
+        }
+
+
+        //===============================GUI Genre=============================
+
+        function updateGenreCheckBoxes(){
+            let result = true
+            const ids = ["gP","gS","gAS","gT","gF","gKids","gC","gW"]
+            for (var i = 0; i < ids.length; i ++){
+                result = document.getElementById(ids[i]).checked && result
+            }
+            document.getElementById("gAll").checked = result
+        }
+
+        function updateAllofAbove(){
+            const ids = ["gP","gS","gAS","gT","gF","gKids","gC","gW"]
+            for (var i = 0; i < ids.length; i ++){
+                document.getElementById(ids[i]).checked = document.getElementById("gAll").checked
+            }
+        }
+
+        
+    </script>
+</body>
