@@ -776,7 +776,9 @@
                     }
                 });
             } else if (sortCriteria == "alphabetical"){
-                return a.title.localeCompare(b.title);
+                res.sort((a,b) => {
+                    return a.title.localeCompare(b.title)
+                });
             }else if (sortCriteria == "Relevance"){
                 res.sort((a,b) => {
                     if (name != ""){
