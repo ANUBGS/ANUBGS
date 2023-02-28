@@ -1,5 +1,31 @@
+:root {
+    --hoverC: rgb(250,230,230);
+    --focusC: rgb(255, 207, 207);
+    --darkC: rgb(58, 58, 58);
+    --darkHover: rgb(70, 70, 70);
+    --darkFocus: rgb(85, 44, 69);
+    --background: rgb(255,245,245);
+    --backgroundAlt: rgb(245,220,220);
+    --borderC: rgb(0,0,0);
+}
+html {
+    margin: 0;
+    padding: 0;
+}
+body {
+    margin: 0;
+    padding: 0;
+}
+
+canvas {
+    position: fixed;
+    z-index: -100;
+}
+
 h1 {
     text-align: center;
+    margin-top: 0;
+    padding-top: 2vh;
 }
 
 * {
@@ -23,7 +49,7 @@ h1 {
     overflow: scroll;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    border: 2px solid black;
+    border: 2px solid var(--borderC);
 }
 
 #resultsWrap::-webkit-scrollbar{
@@ -34,7 +60,7 @@ h1 {
     display: block;
     margin: auto;
     width: 55vw;
-    border: 2px solid rgb(100, 100, 100);
+    border: 2px solid var(--borderC);
     padding-top: 12px;
     padding-bottom: 12px;
     padding-left: 6px;
@@ -42,20 +68,22 @@ h1 {
     font-size: larger;
     outline: none;
     min-width: 200px;
+    opacity: 0.9;
+    background-color: var(--background);
 }
 
 #BGname:focus{
     margin-bottom: 0px;
     margin-top: 0px;
-    background-color: rgb(217, 217, 237);
-    border: 2px solid black;
+    background-color: var(--focusC);
+    border: 2px solid var(--borderC);
 }
 
 .searchBar.searchBar:hover {
     margin-bottom: 0px;
     margin-top: 0px;
-    background-color: rgb(240,240,240);
-    border: 2px solid black;
+    background-color: var(--hoverC);
+    border: 2px solid var(--borderC);
 }
 
 #BGnameDiv{
@@ -63,12 +91,13 @@ h1 {
 }
 
 button {
+    opacity: 0.9;
     display: block;
-    background-color: white;
+    background-color: var(--background);
     margin-top: 12px;
     margin-left: auto;
     margin-right: auto;
-    border: 2px solid rgb(100, 100, 100);
+    border: 2px solid var(--borderC);
     border-radius: 4px;
     padding: 12px;
     outline: none;
@@ -78,13 +107,13 @@ button {
 
 button:hover {
     transform: scale(1.025,1.025);
-    background-color: rgb(240,240,240);
+    background-color: var(--hoverC);
     border-color: black;
 }
 
 button:focus{
     transform: scale(1.025,1.025);
-    background-color: rgb(217, 217, 237);
+    background-color: var(--focusC);
     border-color: black;
 }
 
@@ -102,7 +131,8 @@ button:focus{
 }
 
 .experiment{
-    border: 2px solid black;
+    border: 2px solid var(--borderC);
+    background-color: var(--background);
     border-radius: 4px;
     width: 90%;
     margin-top: 5px;
@@ -110,28 +140,29 @@ button:focus{
     margin-right: auto;
     height: fit-content;
     transition: all 0.25s;
+    opacity: 0.9;
     outline: none;
 }
 
 .experiment.open {
-    background-color: rgb(100, 100, 100);
+    background-color: var(--darkC);
     color: white;
 }
 
 .experiment:hover{
-    background-color: rgb(240,240,240);
+    background-color: var(--hoverC);
 }
 
 .experiment.open:hover{
-    background-color: rgb(120, 120, 120);
+    background-color: var(--darkHover);
 }
 
 .experiment:focus{
-    background-color: rgb(217, 217, 237);
+    background-color: var(--focusC);
 }
 
 .experiment.open:focus{
-    background-color: rgb(75, 75, 108);
+    background-color: var(--darkFocus);
 }
 
 .eLabel{
@@ -189,7 +220,7 @@ button:focus{
     margin-left: auto;
     margin-right: auto;
     grid-template-columns: 1fr 1fr;
-    border: 2px soild black;
+    border: 2px soild var(--borderC);
     width: 90%;
     max-width: 750px;
     row-gap: 10px;
@@ -221,7 +252,7 @@ select {
 
 .allOfAbove {
     display: inline-block;
-    border-top: 2px solid rgb(100, 100, 100);
+    border-top: 2px solid var(--borderC);
     padding: 5px;
     min-width: 35vw;
 }
@@ -256,17 +287,6 @@ ul{
     list-style-type: none;
 }
 
-.nodeItem::before{
-    content: "\25B6";
-    color: black;
-    display: inline-block;
-    margin-right: 6px;
-}
-
-.nodeItem-extended::before {
-    transform: rotate(90deg);
-}
-
 .nested {
     display: none;
 }
@@ -279,7 +299,7 @@ ul{
     cursor: default;
     position: relative;
     display: inline-block;
-    border-bottom: 1px dotted black;
+    border-bottom: 1px dotted var(--borderC);
 }
 
 .helpbox .helpboxtext{
@@ -300,6 +320,7 @@ ul{
 }
 
 table {
+    opacity: 1;
     margin-left: auto;
     margin-right: auto;
     border-collapse: collapse;
@@ -308,32 +329,39 @@ table {
 
 
 th {
-    background-color: rgb(78, 78, 78);
+    opacity: 1;
+    background-color: var(--darkC);
     color: white;
     position: -webkit-sticky;
     position: sticky;
-    outline: 2px solid black;
+    outline: 2px solid var(--borderC);
     text-align: center;
     top: 0;
     padding:10px
 }
 
 td{
-    border: 1px solid #000;
+    border: 1px solid var(--borderC);
     text-align: center;
     padding: 7px
 }
 
 a {
-    color:rgb(75, 75, 108);
+    color: var(--darkFocus);
+    /*filter: brightness(0.5);*/
 }
 
 a:visited{
     color:black;
+    /*filter: none;*/
+}
+
+tbody {
+    background-color: var(--background);
 }
 
 tbody:nth-child(odd) {
-    background-color: rgb(240,240,240);
+    background-color: var(--backgroundAlt);
 }
 
 .na {
