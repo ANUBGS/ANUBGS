@@ -130,6 +130,11 @@ button:focus{
     font-size: 1.2rem;
 }
 
+#home {
+    width: 10%;
+    padding-bottom: 4px;
+}
+
 .experiment{
     border: 2px solid var(--borderC);
     background-color: var(--background);
