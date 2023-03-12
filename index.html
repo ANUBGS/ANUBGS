@@ -356,10 +356,10 @@
         if (!isMobile){
             window.requestAnimationFrame(update);
         }
-        const colours = ["#F08080","#F7977E","#F8AD9D","#FBC4AB","#FFDAB9","#FFEAD0","#FFFAE5"]
+        const colours = ["#03045E","#023E8A","#0077B6","#0096C7","#00B4D8","#48CAE4","#90E0EF","#ADE8F4","#CAF0F8"]
         let rings = [];
         for (var i = 1; i < colours.length; i ++){
-            rings.push(genRing(scale*i*1.5,scale*3))
+            rings.push(genRing(scale*i*1.2,scale*3))
         }
         drawBackground();
         const data = [];
