@@ -1,11 +1,11 @@
 :root {
-    --hoverC: rgb(250,230,230);
-    --focusC: rgb(255, 207, 207);
-    --darkC: rgb(58, 58, 58);
-    --darkHover: rgb(70, 70, 70);
-    --darkFocus: rgb(85, 44, 69);
-    --background: rgb(255,245,245);
-    --backgroundAlt: rgb(245,220,220);
+    --hoverC: rgb(230,230,250);
+    --focusC: rgb(207, 207, 255);
+    --darkC: rgb(50, 50, 50);
+    --darkHover: rgb(60, 60, 60);
+    --darkFocus: rgb(69, 44, 85);
+    --background: rgb(245,245,255);
+    --backgroundAlt: rgb(220,220,245);
     --borderC: rgb(0,0,0);
 }
 html {
@@ -25,7 +25,7 @@ canvas {
 h1 {
     text-align: center;
     margin-top: 0;
-    padding-top: 2vh;
+    padding-top: 4vh;
 }
 
 * {
@@ -115,6 +115,13 @@ button:focus{
     transform: scale(1.025,1.025);
     background-color: var(--focusC);
     border-color: black;
+}
+
+#home{
+    width: 25%;
+    font-size: large;
+    min-width: 100px;
+    max-width: 250px;
 }
 
 #Search{
