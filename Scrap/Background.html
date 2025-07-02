@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <style type="text/css" media="screen">
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: 'grey';
+    }
+  </style>
+  <canvas id="myCanvas" width="200" height="100" style="background-color:srgb(240,240,240)"></canvas>
+  <script>
+    var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    var h = window.innerHeight;
+    var w = window.innerWidth;
+
+    let scale = 5;
+    const prox = 150;
+    const proxsd = 20;
+    const colours = ["#F08080","#F7977E","#F8AD9D","#FBC4AB","#FFDAB9","#FFEAD0","#FFFAE5"]
+    drawBackground()
+    function drawBackground(){
+      for (var i = 0; i < colours.length; i ++){
+        if (i == 0 ){
+          ctx.fillStyle=colours[0]
+          ctx.fillRect(0,0,w,h)
+        }else {
+          genBoarder(scale*i*1.5,scale*3,colours[i])
+        }
+      }
+    }
+
+
+    function Point(x,y){
+      this.x = x;
+      this.y = y;
+      this.cp1x = null;
+      this.cp1y = null;
+      this.cp2x = null;
+      this.cp2y = null;
+    }
+    function calculateCPs(p0,p1,p2){
+      p1.cp1x = ((p0.x+p1.x)/2)+((p1.x)-((p0.x+2*p1.x+p2.x)/4))
+      p1.cp1y = ((p0.y+p1.y)/2)+((p1.y)-((p0.y+2*p1.y+p2.y)/4))
+      p1.cp2x = ((p2.x+p1.x)/2)+((p1.x)-((p0.x+2*p1.x+p2.x)/4))
+      p1.cp2y = ((p2.y+p1.y)/2)+((p1.y)-((p0.y+2*p1.y+p2.y)/4))
+    }
+
+    window.addEventListener("resize", (e) => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      h = window.innerHeight;
+      w = window.innerWidth;
+      scale = Math.min(w,h)/250;
+      drawBackground()
+    })
+    
+    function genBoarder(margin, msd, colour){
+      result = []
+
+      let j = Math.max(normal(4*scale,scale),margin)
+      while (j + margin < w){
+        result.push(j)
+        result.push(normal(margin,msd))
+        j += Math.max(normal(prox,proxsd),scale)
+      }
+
+      j = Math.max(normal(4*scale,scale),margin)
+      while (j + margin < h){
+        result.push(w-(normal(margin,msd)))
+        result.push(j)
+        j += Math.max(normal(prox,proxsd),scale)
+      }
+
+      j = Math.max(normal(4*scale,scale),margin)
+      while (j + margin < w){
+        result.push(w-j)
+        result.push(h-(normal(margin,msd)))
+        j += Math.max(normal(prox,proxsd),scale)
+      }
+      
+      j = Math.max(normal(4*scale,scale),margin)
+      while (j + margin < h){
+        result.push(normal(margin,msd))
+        result.push(h-j)
+        j += Math.max(normal(prox,proxsd),scale)
+      }
+      /*ctx.fillStyle = "#00FF00"
+      ctx.fillRect(result[0],result[1],5,5)
+      console.log("0",result[0],result[1])*/
+
+      for(var i = 0; i < result.length; i += 2){
+        let x_1 = result[clamp(i-2, result.length)];
+        let y_1 = result[clamp(i-1, result.length)];
+        let x0  = result[clamp(i  , result.length)];
+        let y0  = result[clamp(i+1, result.length)];
+        if (x_1 == null || y_1 == null || x0 == null || y0 == null){
+          continue;
+        }else if (dist(x_1,y_1,x0,y0) < 20*scale){
+          result[clamp(i-2, result.length)] = null;
+          result[clamp(i-1, result.length)] = null;
+        }
+      }
+      let tempResult = []
+      for(var i = 0; i <result.length; i++){
+        if (result[i] != null){
+          tempResult.push(result[i])
+        }
+      }
+      result= tempResult
+
+
+      ctx.strokeStyle = "#212121"
+      ctx.beginPath()
+      ctx.moveTo(result[0],result[1])
+      for(var i = 2; i <= result.length; i += 2){
+        let x_2 = result[clamp(i-4, result.length)];
+        let y_2 = result[clamp(i-3, result.length)];
+        let x_1 = result[clamp(i-2, result.length)];
+        let y_1 = result[clamp(i-1, result.length)];
+        let x0  = result[clamp(i  , result.length)];
+        let y0  = result[clamp(i+1, result.length)];
+        let x1  = result[clamp(i+2, result.length)];
+        let y1  = result[clamp(i+3, result.length)];
+
+        let cp1x = ((x_1+x0)/2) + ((x_1)-((x_2+2*x_1+x0)/4)) 
+        let cp1y = ((y_1+y0)/2) + ((y_1)-((y_2+2*y_1+y0)/4)) 
+        let cp2x = ((x_1+x0)/2) + ((x0)-((x_1+2*x0+x1)/4)) 
+        let cp2y = ((y_1+y0)/2) + ((y0)-((y_1+2*y0+y1)/4)) 
+        ctx.bezierCurveTo(cp1x,cp1y,cp2x,cp2y,x0,y0)
+        /*if (i == 2){
+          ctx.bezierCurveTo(cp1x,cp1y,cp2x,cp2y,x0,y0)
+          ctx.fillStyle="#FF0000"
+          ctx.fillRect(cp1x,cp1y,5,5)
+          ctx.fillStyle="#FFFF00"
+          ctx.fillRect(cp2x,cp2y,5,5)
+          console.log(x_1,y_1)
+        }else {
+          ctx.lineTo(x0,y0)
+        }
+        ctx.fillStyle = "#000000"
+        if(i==2){
+          ctx.fillStyle = "#0000FF"
+        }
+        ctx.fillRect(result[i],result[i+1],5,5)*/
+        if (i == result.length){
+          ctx.closePath()
+          ctx.fillStyle = colour
+          ctx.fill()
+          ctx.lineWidth=3;
+          //ctx.stroke()
+        }
+      }
+    }
+    /*ctx.closePath()
+    ctx.stroke()*/
+
+    function clamp(n, m){
+      if ((n%m) < 0){
+        return (n%m) + m;
+      } else {
+        return (n%m)
+      }
+    }
+
+    function dist(x1,y1,x2,y2){
+      return Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2))
+    }
+    function normal(mean, sd){
+      let stdNorm = Math.sqrt(-2*Math.log(Math.random()))*Math.cos(2*Math.PI*Math.random());
+      return (mean + sd*stdNorm)
+    }
+  </script>
+</body>
+
+</html>

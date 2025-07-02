@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <style type="text/css" media="screen">
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: 'grey';
+    }
+  </style>
+  <canvas id="myCanvas" width="200" height="100" style="background-color:srgb(240,240,240); display: none;"></canvas>
+  <svg id = "svgE" xmlns="http://www.w3.org/2000/svg" style="background-color: aqua;">
+
+  </svg>
+  <script>
+    var canvas = document.getElementById("myCanvas");
+    var svg = document.getElementById("svgE")
+    var ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    var h = window.innerHeight;
+    var w = window.innerWidth;
+    svg.style.width = w +"px"
+    svg.style.height = h +"px"
+
+    const outline = false;
+    const outlineColour = "black";
+    const outlineWeight = 1;
+
+    let scale = Math.min(Math.min(w,h)/100,4);
+    const prox = 150;
+    const proxsd = 20;
+    const maxSpeed = 0.1;
+    const accelerationConstant = 0.0001;
+    //const colours = ["#F08080","#F7977E","#F8AD9D","#FBC4AB","#FFDAB9","#FFEAD0","#FFFAE5"]
+    let colours = [/*"#A4133C","#C9184A","#ff4D6D","#FF758F",*/"#CE4257","#D45570","#F08080","#F7977E","#F8AD9D","#FBC4AB","#FFDAB9","#FFEAD0","#FFFAE5"]
+    //const colours = ["#03045E","#023E8A","#0077B6","#0096C7","#00B4D8","#48CAE4","#90E0EF","#ADE8F4","#CAF0F8"]
+    colours = ["#03045E","#023E8A","#0077B6","#0096C7","#00B4D8","#48CAE4","#90E0EF","#ADE8F4","#CAF0F8"]
+    let rings = []
+
+    for (var i = 1; i < colours.length; i ++){
+      rings.push(genRing(scale*i*2,scale*4))
+    }
+
+    function drawSVGBackground(){
+      for (var i = 0; i < colours.length; i ++){
+        if (i == 0 ){
+          svg.style.backgroundColor = colours[i];
+        }else {
+          drawSVGRing(rings[i-1],colours[i])
+        }
+      }
+    }
+    // 1280x832
+    drawSVGBackground();
+    //drawBackground()
+
+    //let af = window.requestAnimationFrame(update);
+    function update(){
+      ctx.clearRect(0,0,w,h)
+      for (var i = 0; i < rings.length; i ++){
+        for (var j = 0; j < rings[i].length; j ++){
+          if (Math.sqrt(Math.pow(rings[i][j].x-rings[i][j].tx,2)+Math.pow(rings[i][j].y-rings[i][j].ty,2))<= 3){
+            rings[i][j].tx = rings[i][j].homex + normal(0,4*scale)
+            rings[i][j].ty = rings[i][j].homey + normal(0,4*scale)
+          }else{
+            rings[i][j].vx += (rings[i][j].tx-rings[i][j].x) * accelerationConstant
+            rings[i][j].vy += (rings[i][j].ty-rings[i][j].y) * accelerationConstant
+            let speed = Math.sqrt(Math.pow(rings[i][j].vx,2)+Math.pow(rings[i][j].vy,2))
+            if (speed >= maxSpeed){
+              rings[i][j].vx = (rings[i][j].vx/speed)*maxSpeed
+              rings[i][j].vy = (rings[i][j].vy/speed)*maxSpeed
+            }
+            rings[i][j].x += rings[i][j].vx
+            rings[i][j].y += rings[i][j].vy
+          }
+        }
+      }
+      drawBackground()
+      window.requestAnimationFrame(update);
+    }
+
+    //drawRing(genRing(50,30),"rgba(0,0,0,0.25)")
+    function drawBackground(){
+      for (var i = 0; i < colours.length; i ++){
+        if (i == 0 ){
+          ctx.fillStyle=colours[0]
+          ctx.fillRect(0,0,w,h)
+        }else {
+          drawRing(rings[i-1],colours[i])
+        }
+      }
+    }
+
+
+    function Point(x,y){
+      this.x = x;
+      this.y = y;
+      this.homex = x;
+      this.homey = y;
+      this.cp1x = null;
+      this.cp1y = null;
+      this.cp2x = null;
+      this.cp2y = null;
+      this.vx = 0;
+      this.vy = 0;
+      this.tx = x+normal(0,4*scale)
+      this.ty = y+normal(0,4*scale)
+    }
+
+    function scaleP(p,cx,cy){
+      p.x = p.x*cx;
+      p.y = p.y*cy;
+      p.cp1x = p.cp1x*cx;
+      p.cp1y = p.cp1y*cy;
+      p.cp2x = p.cp2x*cx;
+      p.cp2y = p.cp2y*cy;
+      p.homex = p.homex*cx;
+      p.homey = p.homey*cy;
+      p.tx = p.tx*cx;
+      p.ty = p.ty*cy;
+      p.vx = p.vx*cx;
+      p.vy = p.vy*cy;
+    }
+    function calculateCPs(p0,p1,p2){
+      p1.cp1x = ((p0.x+p1.x)/2)+((p1.x)-((p0.x+2*p1.x+p2.x)/4))
+      p1.cp1y = ((p0.y+p1.y)/2)+((p1.y)-((p0.y+2*p1.y+p2.y)/4))
+      p1.cp2x = ((p2.x+p1.x)/2)+((p1.x)-((p0.x+2*p1.x+p2.x)/4))
+      p1.cp2y = ((p2.y+p1.y)/2)+((p1.y)-((p0.y+2*p1.y+p2.y)/4))
+    }
+
+    function distance(p0,p1){
+      return Math.sqrt(Math.pow(p0.x-p1.x,2)+Math.pow(p0.y-p1.y,2))
+    }
+
+    window.addEventListener("resize", (e) => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      let cx = window.innerWidth/w
+      let cy = window.innerHeight/h
+      h = window.innerHeight;
+      w = window.innerWidth;
+      scale = Math.min(Math.min(w,h)/100,4);
+      for (var i = 0; i <rings.length; i ++){
+        for(var j = 0; j <rings[i].length; j ++){
+          scaleP(rings[i][j],cx,cy)
+        }
+      }
+      drawBackground()
+    })
+    
+    function genRing(margin, msd){
+      result = []
+
+      let j = Math.max(normal(4*scale,scale),margin)
+      while (j + margin < w){
+        result.push(new Point(j,normal(margin,msd)))
+        j += Math.max(normal(prox,proxsd),scale)
+      }
+
+      j = Math.max(normal(4*scale,scale),margin)
+      while (j + margin < h){
+        result.push(new Point(w-(normal(margin,msd)),j))
+        j += Math.max(normal(prox,proxsd),scale)
+      }
+
+      j = Math.max(normal(4*scale,scale),margin)
+      while (j + margin < w){
+        result.push(new Point(w-j,h-(normal(margin,msd))))
+        j += Math.max(normal(prox,proxsd),scale)
+      }
+      
+      j = Math.max(normal(4*scale,scale),margin)
+      while (j + margin < h){
+        result.push(new Point(normal(margin,msd),h-j))
+        j += Math.max(normal(prox,proxsd),scale)
+      }
+
+      for (var i = 0; i < result.length; i ++){
+        if (result[clamp(i-1, result.length)] != null && result[clamp(i, result.length)] != null){
+          if (distance(result[clamp(i-1, result.length)],result[clamp(i, result.length)]) < 20*scale){
+            result[clamp(i-1, result.length)] = null;
+          }
+        }
+      }
+
+      let tempResult = []
+      for(var i = 0; i <result.length; i++){
+        if (result[i] != null){
+          tempResult.push(result[i])
+        }
+      }
+      result = tempResult
+      return result;
+    
+    }
+
+    function drawSVGRing(ring,colour){
+      for(var i = 0; i <ring.length; i++){
+        calculateCPs(ring[clamp(i-1,ring.length)],ring[clamp(i,ring.length)],ring[clamp(i+1,ring.length)])
+      }
+      var results = "<path d=\"M"+ring[0].x+" " + ring[0].y;
+      for(var i = 0; i <= ring.length; i ++ ){
+        let p0 = ring[clamp(i,ring.length)]
+        let p1 = ring[clamp(i+1,ring.length)]
+        results += " C " + p0.cp2x + " " + p0.cp2y + ", " + p1.cp1x + " " + p1.cp1y +", " + p1.x + " " + p1.y;
+        /*ctx.bezierCurveTo(p0.cp2x,p0.cp2y,p1.cp1x,p1.cp1y,p1.x,p1.y)
+        if (i == ring.length){
+          ctx.closePath()
+          ctx.fillStyle = colour
+          ctx.fill()
+        }*/
+      }
+      //results += "\" stroke=\"green\" stroke-width=\"1\" fill =\"none\" />";
+      if (outline){
+        results += "\" stroke=\""+outlineColour+"\" stroke-width=\""+outlineWeight+"\" fill =\""+colour+"\" />";
+      } else {
+        results += "\" stroke=\"none\" fill =\""+colour+"\" />";
+      }
+      
+      //results = "<circle cx=\"50\" cy=\"50\" r=\"40\" />";
+      console.log(results)
+      svg.innerHTML = svg.innerHTML + results;
+    }
+
+    function drawRing(ring,colour){
+      ctx.fillStyle = "#000000"
+      for(var i = 0; i <ring.length; i++){
+        calculateCPs(ring[clamp(i-1,ring.length)],ring[clamp(i,ring.length)],ring[clamp(i+1,ring.length)])
+        /*ctx.fillRect(ring[i].x,ring[i].y,5,5)
+        ctx.beginPath()
+        ctx.moveTo(ring[i].cp1x,ring[i].cp1y)
+        ctx.lineTo(ring[i].cp2x,ring[i].cp2y)
+        ctx.stroke()*/
+      }
+
+      ctx.strokeStyle = "#212121"
+      ctx.beginPath()
+      ctx.moveTo(ring[0].x,ring[0].y)
+      for(var i = 0; i <= ring.length; i ++ ){
+        let p0 = ring[clamp(i,ring.length)]
+        let p1 = ring[clamp(i+1,ring.length)]
+        ctx.bezierCurveTo(p0.cp2x,p0.cp2y,p1.cp1x,p1.cp1y,p1.x,p1.y)
+        if (i == ring.length){
+          ctx.closePath()
+          ctx.fillStyle = colour
+          ctx.fill()
+        }
+      }
+    }
+
+    function clamp(n, m){
+      if ((n%m) < 0){
+        return (n%m) + m;
+      } else {
+        return (n%m)
+      }
+    }
+    function normal(mean, sd){
+      let stdNorm = Math.sqrt(-2*Math.log(Math.random()))*Math.cos(2*Math.PI*Math.random());
+      return (mean + sd*stdNorm)
+    }
+  </script>
+</body>
+
+</html>

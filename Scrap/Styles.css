@@ -1,0 +1,363 @@
+h1 {
+    text-align: center;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: Montserrat;
+}
+
+#sortBy {
+    display: inline-block;
+}
+
+#resultsWrap{
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 90vh;
+    max-width: 90vw;
+    width: fit-content;
+    overflow: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    border: 2px solid black;
+}
+
+#resultsWrap::-webkit-scrollbar{
+    display: none;
+}
+
+#BGname {
+    display: block;
+    margin: auto;
+    width: 55vw;
+    border: 2px solid rgb(100, 100, 100);
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 6px;
+    border-radius: 4px;
+    font-size: larger;
+    outline: none;
+    min-width: 200px;
+}
+
+#BGname:focus{
+    margin-bottom: 0px;
+    margin-top: 0px;
+    background-color: rgb(217, 217, 237);
+    border: 2px solid black;
+}
+
+.searchBar.searchBar:hover {
+    margin-bottom: 0px;
+    margin-top: 0px;
+    background-color: rgb(240,240,240);
+    border: 2px solid black;
+}
+
+#BGnameDiv{
+    min-height: 10%;
+}
+
+button {
+    display: block;
+    background-color: white;
+    margin-top: 12px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 2px solid rgb(100, 100, 100);
+    border-radius: 4px;
+    padding: 12px;
+    outline: none;
+    transition-property: background-color,border-color,transform;
+    transition-duration: 0.2s;
+}
+
+button:hover {
+    transform: scale(1.025,1.025);
+    background-color: rgb(240,240,240);
+    border-color: black;
+}
+
+button:focus{
+    transform: scale(1.025,1.025);
+    background-color: rgb(217, 217, 237);
+    border-color: black;
+}
+
+#Search{
+    width: 50%;
+    font-size: large;
+    min-width: 200px;
+    max-width: 500px;
+}
+
+#reset {
+    width: 25%;
+    min-width: 150px;
+    font-size: 1.2rem;
+}
+
+.experiment{
+    border: 2px solid black;
+    border-radius: 4px;
+    width: 90%;
+    margin-top: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    height: fit-content;
+    transition: all 0.25s;
+    outline: none;
+}
+
+.experiment.open {
+    background-color: rgb(100, 100, 100);
+    color: white;
+}
+
+.experiment:hover{
+    background-color: rgb(240,240,240);
+}
+
+.experiment.open:hover{
+    background-color: rgb(120, 120, 120);
+}
+
+.experiment:focus{
+    background-color: rgb(217, 217, 237);
+}
+
+.experiment.open:focus{
+    background-color: rgb(75, 75, 108);
+}
+
+.eLabel{
+    text-align: center;
+    margin-top: 3px;
+    margin-bottom: 0px;
+    font-size: 1.1rem;
+    transition: font-size 0.25s;
+}
+
+.chevron{
+    transform: rotate(-45deg);
+    transform-origin: 50% 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    transition: all 0.25s;
+    margin-bottom: 12px;
+    filter: brightness(0) saturate(100%);
+}
+
+.experiment:hover .chevron{
+    transform: scale(1.25,1.25) rotate(-45deg);
+    transform-origin: 50% 50%;
+}
+.experiment:focus .chevron{
+    transform: scale(1.25,1.25) rotate(-45deg);
+    transform-origin: 50% 50%;
+}
+
+.experiment.open  .chevron{
+    transform: translate(0px,5px) rotate(135deg);
+    filter: brightness(255) saturate(100%);
+}
+
+.experiment.open:hover  .chevron{
+    transform: scale(1.25,1.25) translate(0px,5px) rotate(135deg);
+}
+
+.insides {
+    max-height: 0;
+    overflow: hidden;
+    height: 100%;
+    text-align: center;
+}
+
+.insides.trans {
+    transition: all .5s;
+}
+
+.fGrid{
+    margin-top: 15px;
+    margin-bottom: 15px;
+    display: inline-grid;
+    margin-left: auto;
+    margin-right: auto;
+    grid-template-columns: 1fr 1fr;
+    border: 2px soild black;
+    width: 90%;
+    max-width: 750px;
+    row-gap: 10px;
+    align-items: center;
+}
+
+.fGrid label{
+    text-align: right;
+}
+
+.fGrid div{
+    text-align: left;
+}
+
+input[type="range"]{
+    vertical-align: middle;
+}
+
+input {
+    min-width: none;
+    max-width: 30vw;
+}
+
+select {
+    min-width: none;
+    max-width: 30vw;
+    height: 4vh;
+}
+
+.allOfAbove {
+    display: inline-block;
+    border-top: 2px solid rgb(100, 100, 100);
+    padding: 5px;
+    min-width: 35vw;
+}
+
+.nodeItem {
+    cursor: pointer;
+    user-select: none;
+}
+
+li {
+    padding-top: 2.5px;
+    padding-bottom: 2.5px ;
+}
+
+label{
+    padding-right: 7.5px;
+}
+
+label.disabled {
+    color: gray;
+}
+
+div.rangeClass{
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+}
+
+ul{
+    list-style-type: none;
+}
+
+.nodeItem::before{
+    content: "\25B6";
+    color: black;
+    display: inline-block;
+    margin-right: 6px;
+}
+
+.nodeItem-extended::before {
+    transform: rotate(90deg);
+}
+
+.nested {
+    display: none;
+}
+
+.active {
+    display:block;
+}
+
+.helpbox {
+    cursor: default;
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+.helpbox .helpboxtext{
+    cursor: default;
+    visibility: visible;
+    width: 250px;
+    background-color: rgb(78, 78, 78);
+    color: rgb(255, 255, 255);
+    text-align: center;
+    padding: 5px;
+    border-radius: 5px;
+    display: inline-block;
+    position: fixed;
+    z-index: 10;
+    left: 250px;
+    opacity: 0;
+    transition: opacity 0.4s;
+}
+
+table {
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: collapse;
+    min-width: 50%
+}
+
+
+th {
+    background-color: rgb(78, 78, 78);
+    color: white;
+    position: -webkit-sticky;
+    position: sticky;
+    outline: 2px solid black;
+    text-align: center;
+    top: 0;
+    padding:10px
+}
+
+td{
+    border: 1px solid #000;
+    text-align: center;
+    padding: 7px
+}
+
+a {
+    color:rgb(75, 75, 108);
+}
+
+a:visited{
+    color:black;
+}
+
+tbody:nth-child(odd) {
+    background-color: rgb(240,240,240);
+}
+
+.na {
+    color:gray;
+}
+
+.helpbox .helpboxtext::after{
+    cursor: default;
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgb(78, 78, 78) transparent transparent transparent;
+}
+
+.helpboxtext.show{
+    visibility: visible;
+    opacity: 1;
+}
+
+
+.transHide {
+    display: none;
+}

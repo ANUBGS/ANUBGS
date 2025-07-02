@@ -1,0 +1,192 @@
+[{
+  "complexity": 1.103,
+  "genre": [
+    "Party"
+  ],
+  "id": 86073,
+  "maxPC": 6,
+  "maxTime": 30,
+  "minPC": 3,
+  "minTime": 30,
+  "nPC": 16,
+  "nWeights": 68,
+  "raters": 2442,
+  "rating": 5.485,
+  "recommendedPC": [
+    {
+      "andAbove": false,
+      "count": 1,
+      "good": 0.062,
+      "okay": 0.062
+    },
+    {
+      "andAbove": false,
+      "count": 2,
+      "good": 0.125,
+      "okay": 0.188
+    },
+    {
+      "andAbove": false,
+      "count": 3,
+      "good": 0.25,
+      "okay": 0.688
+    },
+    {
+      "andAbove": false,
+      "count": 4,
+      "good": 0.562,
+      "okay": 0.812
+    },
+    {
+      "andAbove": false,
+      "count": 5,
+      "good": 0.5,
+      "okay": 0.75
+    },
+    {
+      "andAbove": false,
+      "count": 6,
+      "good": 0.438,
+      "okay": 0.688
+    },
+    {
+      "andAbove": true,
+      "count": 6,
+      "good": 0.062,
+      "okay": 0.375
+    }
+  ],
+  "title": "5 Second Rule",
+  "url": "https://boardgamegeek.com/boardgame/86073"
+},{
+  "complexity": 2.32,
+  "genre": [
+    "Family",
+    "Strategy"
+  ],
+  "id": 68448,
+  "maxPC": 7,
+  "maxTime": 30,
+  "minPC": 2,
+  "minTime": 30,
+  "nPC": 2349,
+  "nWeights": 5117,
+  "raters": 100705,
+  "rating": 7.693,
+  "recommendedPC": [
+    {
+      "andAbove": false,
+      "count": 1,
+      "good": 0.002,
+      "okay": 0.009
+    },
+    {
+      "andAbove": false,
+      "count": 2,
+      "good": 0.05,
+      "okay": 0.214
+    },
+    {
+      "andAbove": false,
+      "count": 3,
+      "good": 0.211,
+      "okay": 0.737
+    },
+    {
+      "andAbove": false,
+      "count": 4,
+      "good": 0.53,
+      "okay": 0.865
+    },
+    {
+      "andAbove": false,
+      "count": 5,
+      "good": 0.471,
+      "okay": 0.834
+    },
+    {
+      "andAbove": false,
+      "count": 6,
+      "good": 0.209,
+      "okay": 0.719
+    },
+    {
+      "andAbove": false,
+      "count": 7,
+      "good": 0.175,
+      "okay": 0.649
+    },
+    {
+      "andAbove": true,
+      "count": 7,
+      "good": 0.013,
+      "okay": 0.058
+    }
+  ],
+  "title": "7 Wonders",
+  "url": "https://boardgamegeek.com/boardgame/68448"
+},{
+  "complexity": 2.651,
+  "genre": null,
+  "id": 154638,
+  "maxPC": 7,
+  "maxTime": 45,
+  "minPC": 2,
+  "minTime": 45,
+  "nPC": 35,
+  "nWeights": 132,
+  "raters": 4038,
+  "rating": 6.906,
+  "recommendedPC": [
+    {
+      "andAbove": false,
+      "count": 1,
+      "good": 0.0,
+      "okay": 0.0
+    },
+    {
+      "andAbove": false,
+      "count": 2,
+      "good": 0.057,
+      "okay": 0.2
+    },
+    {
+      "andAbove": false,
+      "count": 3,
+      "good": 0.086,
+      "okay": 0.714
+    },
+    {
+      "andAbove": false,
+      "count": 4,
+      "good": 0.343,
+      "okay": 0.829
+    },
+    {
+      "andAbove": false,
+      "count": 5,
+      "good": 0.571,
+      "okay": 0.829
+    },
+    {
+      "andAbove": false,
+      "count": 6,
+      "good": 0.314,
+      "okay": 0.8
+    },
+    {
+      "andAbove": false,
+      "count": 7,
+      "good": 0.114,
+      "okay": 0.743
+    },
+    {
+      "andAbove": true,
+      "count": 7,
+      "good": 0.086,
+      "okay": 0.229
+    }
+  ],
+  "title": "7 Wonders: Babel",
+  "url": "https://boardgamegeek.com/boardgame/154638"
+}
